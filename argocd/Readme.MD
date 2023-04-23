@@ -30,3 +30,8 @@ To install the chart with the release name my-release:
 ## To Get the ArGOCD Password
 
     kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+# Argocd Login CLI 
+
+
+         $ argocd login argocd.gcp.intverse.io:443

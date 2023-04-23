@@ -1,0 +1,14 @@
+project: default
+source:
+  repoURL: 'https://grafana.github.io/helm-charts'
+  targetRevision: 1.1.0
+  helm:
+    valueFiles:
+      - values.yaml
+  chart: tempo
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: monitoring
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true

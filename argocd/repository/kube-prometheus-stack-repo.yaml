@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kube-prometheus-stack-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: kube-prometheus-stack-repo
+  url: https://prometheus-community.github.io/helm-charts
+  type: helm

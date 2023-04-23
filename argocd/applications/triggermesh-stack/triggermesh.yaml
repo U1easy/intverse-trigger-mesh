@@ -1,0 +1,20 @@
+project: default
+source:
+  repoURL: 'https://storage.googleapis.com/triggermesh-charts'
+  targetRevision: 0.7.2
+  helm:
+    valueFiles:
+      - values.yaml
+  chart: triggermesh
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: trigger-mesh
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+  retry:
+    limit: 2
+    backoff:
+      duration: 5s
+      factor: 2
+      maxDuration: 3m0s
