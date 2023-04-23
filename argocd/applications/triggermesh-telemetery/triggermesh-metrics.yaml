@@ -1,11 +1,29 @@
-project: default
-source:
-  repoURL: 'git@github.com:IntVerse/intverse-trigger-mesh.git'
-  path: Observability/metrics/
-  targetRevision: HEAD
-destination:
-  server: 'https://kubernetes.default.svc'
-  namespace: observability
-syncPolicy:
-  syncOptions:
-    - CreateNamespace=true
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-observability
+  namespace: trigger-mesh
+data:
+  metrics.backend-destination: prometheus
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: triggermesh-components
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:  # 
+      app.kubernetes.io/part-of: triggermesh
+  namespaceSelector:  # 
+    any: true
+  podMetricsEndpoints:  # 
+  - port: metrics
+  - port: user-port
+    relabelings:
+    - action: replace
+      targetLabel: __address__
+      sourceLabels:
+      - __meta_kubernetes_pod_ip
+      replacement: $1:9092
+  jobLabel: app.kubernetes.io/name  # 

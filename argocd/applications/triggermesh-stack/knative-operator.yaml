@@ -1,12 +1,23 @@
-project: default
-source:
-  repoURL: 'https://storage.googleapis.com/triggermesh-charts'
-  targetRevision: 0.5.0
-  helm:
-    valueFiles:
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: knative-operator-stack
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: knative-operator-stack
+spec:
+  project: default
+  source:
+    repoURL: https://storage.googleapis.com/triggermesh-charts'
+    targetRevision: 0.5.0
+    chart: knative-operator
+    helm:
+      valueFiles:
       - values.yaml
-  chart: knative-operator
-destination:
-  server: 'https://kubernetes.default.svc'
-  namespace: knative-operator
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: knative-operator
 syncPolicy: {}

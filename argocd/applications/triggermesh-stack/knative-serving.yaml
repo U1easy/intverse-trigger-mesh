@@ -1,11 +1,23 @@
-project: default
-source:
-  repoURL: 'https://github.com/IntVerse/intverse-trigger-mesh.git'
-  path: knative-serving
-  targetRevision: HEAD
-destination:
-  server: 'https://kubernetes.default.svc'
-  namespace: knative-serving
-syncPolicy:
-  syncOptions:
-    - CreateNamespace=true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: knative-serving-stack
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: knative-serving-stack
+spec:
+  project: default
+  source:
+    repoURL: https://storage.googleapis.com/triggermesh-charts
+    path: knative-serving
+    targetRevision: HEAD
+    chart: knative-operator
+    helm:
+      valueFiles:
+      - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: knative-serving
+syncPolicy: {}
