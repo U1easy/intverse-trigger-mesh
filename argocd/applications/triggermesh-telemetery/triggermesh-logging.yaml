@@ -1,0 +1,44 @@
+project: default
+source:
+  repoURL: 'git@github.com:IntVerse/intverse-trigger-mesh.git'
+  path: Observability/Logging/
+  targetRevision: HEAD
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: observability
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: triggermesh-stack
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: triggermesh-stack
+spec:
+  project: default
+  source:
+    repoURL: https://storage.googleapis.com/triggermesh-charts
+    path: observability/logging/
+    targetRevision: HEAD
+    chart: triggermesh
+    helm:
+      valueFiles:
+      - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: trigger-mesh
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+  retry:
+    limit: 2
+    backoff:
+      duration: 5s
+      factor: 2
+      maxDuration: 3m0s
