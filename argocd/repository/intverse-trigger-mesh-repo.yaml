@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: intverse-trigger-mesh-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: intverse-trigger-mesh-repo
+  type: git
+  url: git@github.com:IntVerse/intverse-trigger-mesh.git
+  sshPrivateKey: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+    b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+    QyNTUxOQAAACC3kQ6hbX3vcs5UZ/g0+dz3yr9DNhA3cqJ/AJ1BveTj5AAAAJipB6RzqQek
+    cwAAAAtzc2gtZWQyNTUxOQAAACC3kQ6hbX3vcs5UZ/g0+dz3yr9DNhA3cqJ/AJ1BveTj5A
+    AAAECWt6Ye4twFb+YOTWKN3c2vusC2CZDJsjGH0BOYjvGFDbeRDqFtfe9yzlRn+DT53PfK
+    v0M2EDdyon8AnUG95OPkAAAAE2dlbmVyYWxAaW50dmVyc2UuaW8BAg==
+    -----END OPENSSH PRIVATE KEY-----

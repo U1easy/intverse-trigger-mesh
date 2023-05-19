@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: triggermesh-stack-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: triggermesh-stack-repo
+  url: https://storage.googleapis.com/triggermesh-charts
+  type: helm
