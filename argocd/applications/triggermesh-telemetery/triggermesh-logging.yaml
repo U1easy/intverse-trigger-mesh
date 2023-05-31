@@ -14,12 +14,12 @@ syncPolicy:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: triggermesh-stack
+  name: triggermesh-stack-logging
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
-    name: triggermesh-stack
+    name: triggermesh-stack-logging
 spec:
   project: default
   source:

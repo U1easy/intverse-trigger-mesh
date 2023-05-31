@@ -1,29 +1,44 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: config-observability
-  namespace: trigger-mesh
-data:
-  metrics.backend-destination: prometheus
+project: default
+source:
+  repoURL: 'git@github.com:IntVerse/intverse-trigger-mesh.git'
+  path: Observability/metrics/
+  targetRevision: HEAD
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: observability
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+
 ---
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: triggermesh-components
-  namespace: monitoring
+  name: triggermesh-stack-metrics
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: triggermesh-stack-metrics
 spec:
-  selector:
-    matchLabels:  # 
-      app.kubernetes.io/part-of: triggermesh
-  namespaceSelector:  # 
-    any: true
-  podMetricsEndpoints:  # 
-  - port: metrics
-  - port: user-port
-    relabelings:
-    - action: replace
-      targetLabel: __address__
-      sourceLabels:
-      - __meta_kubernetes_pod_ip
-      replacement: $1:9092
-  jobLabel: app.kubernetes.io/name  # 
+  project: default
+  source:
+    repoURL: https://storage.googleapis.com/triggermesh-charts
+    path: observability/metrics/
+    targetRevision: HEAD
+    chart: triggermesh
+    helm:
+      valueFiles:
+      - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: trigger-mesh
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+  retry:
+    limit: 2
+    backoff:
+      duration: 5s
+      factor: 2
+      maxDuration: 3m0s
